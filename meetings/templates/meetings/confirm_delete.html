@@ -1,0 +1,37 @@
+<!-- templates/meetings/confirm_delete.html -->
+{% extends 'base.html' %}
+
+{% block title %}تأكيد الحذف{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0"><i class="bi bi-exclamation-triangle"></i> تأكيد الحذف</h4>
+            </div>
+            <div class="card-body">
+                <p>هل أنت متأكد من حذف الاجتماع:</p>
+                <h5 class="text-primary">{{ meeting.title }}</h5>
+                <p class="text-muted">
+                    <small>تم إنشاؤه في: {{ meeting.created_at|date:"d M Y - H:i" }}</small>
+                </p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>تحذير:</strong> هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع البيانات المرتبطة بهذا الاجتماع.
+                </div>
+
+                <form method="post" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> نعم، احذف
+                    </button>
+                    <a href="{% url 'meeting_detail' meeting.pk %}" class="btn btn-secondary">
+                        <i class="bi bi-x"></i> إلغاء
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
