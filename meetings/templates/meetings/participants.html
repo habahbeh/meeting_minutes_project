@@ -1,0 +1,122 @@
+<!-- templates/meetings/participants.html -->
+{% extends 'base.html' %}
+
+{% block title %}المشاركين في الاجتماع{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-people"></i> المشاركين في الاجتماع: {{ meeting.title }}</h2>
+            <a href="{% url 'meeting_detail' meeting.pk %}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-right"></i> العودة للاجتماع
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-person-plus"></i> إضافة مشارك جديد</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">اسم المشارك</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">البريد الإلكتروني</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.role.id_for_label }}" class="form-label">الدور في الاجتماع</label>
+                                {{ form.role }}
+                                {% if form.role.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.role.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle"></i> إضافة مشارك
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="bi bi-people-fill"></i> قائمة المشاركين</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if participants %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">الاسم</th>
+                                            <th scope="col">البريد الإلكتروني</th>
+                                            <th scope="col">الدور</th>
+                                            <th scope="col">الإجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for participant in participants %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ participant.name }}</td>
+                                            <td>{{ participant.email|default:"-" }}</td>
+                                            <td>{{ participant.role|default:"-" }}</td>
+                                            <td>
+                                                <form method="post" action="#" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="participant_id" value="{{ participant.id }}">
+                                                    <button type="submit" name="delete_participant" class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                لا يوجد مشاركين مضافين بعد.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

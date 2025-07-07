@@ -1,0 +1,66 @@
+<!-- templates/meetings/edit_meeting.html -->
+{% extends 'base.html' %}
+
+{% block title %}تحرير محضر الاجتماع{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-pencil"></i> تحرير محضر الاجتماع</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">عنوان الاجتماع</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.title.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.minutes.id_for_label }}" class="form-label">محضر الاجتماع</label>
+                        {{ form.minutes }}
+                        {% if form.minutes.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.minutes.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.summary.id_for_label }}" class="form-label">تلخيص الاجتماع</label>
+                        {{ form.summary }}
+                        {% if form.summary.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.summary.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> حفظ التغييرات
+                        </button>
+                        <a href="{% url 'meeting_detail' meeting.pk %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x"></i> إلغاء
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
